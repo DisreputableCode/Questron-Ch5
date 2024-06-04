@@ -167,7 +167,10 @@ export default {
   methods: {
     // calculate the rendered pixel height of the bar
     visualHeight () {
-      return this.$refs.mainBar.getBoundingClientRect().height
+      if (this.$refs.mainBar) {
+        return this.$refs.mainBar.getBoundingClientRect().height
+      }
+      return 0
     },
     // scale the value from bar height in pixels to analog value to send to processor
     // calculation can be reversed
@@ -206,8 +209,8 @@ export default {
     adjust (adjVal) {
       if (this.muted) this.mute() // unmute if currently muted
       this.iconPressed = true // mark button as pressed
-      var precisionVal = this.value // clone value, use internal copy to allow higher resolution feedback while adjusting
-      var timer = setInterval(() => {
+      let precisionVal = this.value // clone value, use internal copy to allow higher resolution feedback while adjusting
+      const timer = setInterval(() => {
         precisionVal += adjVal * ((this.max - this.min) / 1000) // adjust value each round
         this.setValue(Math.round(precisionVal)) // set the output value to the rounded value
         if (this.ramp) adjVal = Math.min(adjVal * 1.02, 10) // ramp speed of adjustment if button is held
@@ -292,14 +295,14 @@ export default {
   },
   mounted () {
     if (!this.fakeFb) {
-      var that = this
-      // subscribe the feedback value to the processor fb
-      this.$crestron.subscribeState('number', String(this.join), function (value) {
-        that.setFbValue(Number(value), false)
+      this.$nextTick(() => {
+        this.$crestron.subscribeState('number', String(this.join), (value) => {
+          this.setFbValue(Number(value), false)
+        })
       })
     }
   },
-  beforeDestroy () {
+  beforeUnmount () {
     // unsubscribe if element is unmounted from display
     if (!this.fakeFb) this.$crestron.unsubscribeState('number', String(this.join))
   }

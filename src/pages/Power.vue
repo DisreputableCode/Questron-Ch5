@@ -25,6 +25,7 @@
 import ChBtn from '../components/crestron/Button'
 
 export default {
+  name: 'PowerPage',
   components: {
     ChBtn
   },

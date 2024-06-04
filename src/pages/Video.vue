@@ -111,6 +111,7 @@
 import ChVerticalSlider from '../components/crestron/VerticalSlider'
 
 export default {
+  name: 'VideoPage',
   components: {
     ChVerticalSlider
   },
@@ -137,7 +138,7 @@ export default {
   },
   methods: {
     pulse (join) {
-      var that = this
+      const that = this
       this.$crestron.publishEvent('boolean', String(join), true)
       setTimeout(function () {
         that.$crestron.publishEvent('boolean', String(join), false)
@@ -153,7 +154,7 @@ export default {
     }
   },
   mounted () {
-    var that = this
+    const that = this
     this.$crestron.subscribeState('boolean', String(that.joins.pcSelect), function (val) {
       if (val) that.source = 'pc'
     })
@@ -173,7 +174,7 @@ export default {
       that.detected.hdmi2 = val
     })
   },
-  beforeDestroy () {
+  beforeUnmount () {
     this.$crestron.unsubscribeState('boolean', String(this.joins.pcSelect))
     this.$crestron.unsubscribeState('boolean', String(this.joins.hdmi1Select))
     this.$crestron.unsubscribeState('boolean', String(this.joins.hdmi2Select))

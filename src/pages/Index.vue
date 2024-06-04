@@ -7,9 +7,10 @@
           src="~assets/logo.png"
           @touchstart="press"
           @touchend="release"
-          style="height: 700px; padding-top: 15px"
-          contain
+          style="height: 75vh; padding-top: 15px"
+          fit="contain"
         />
+        <div class="text-center text-h2">Touch screen to start...</div>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -28,12 +29,12 @@ export default {
     }
   },
   mounted () {
-    var that = this
+    const that = this
     that.$crestron.subscribeState('boolean', '50', function (val) {
       if (val) that.$router.push('/main/video') // switch route to main page once proc pushes command
     })
   },
-  beforeDestroy () {
+  beforeUnmount () {
     this.$crestron.publishEvent('boolean', '50', false) // be sure to reset button press to low if screen switches before button released
     this.$crestron.unsubscribeState('boolean', '50') // unsubscribe watcher
   }

@@ -17,13 +17,16 @@
     </q-header>
 
     <q-page-container>
+    <router-view v-slot="{ Component, route }">
       <transition
         appear
         enter-active-class="animated fadeInLeft"
+        mode="out-in"
       >
-        <router-view :key="$route.path" />
+        <component :is="Component" :key="route.path" />
       </transition>
-    </q-page-container>
+    </router-view>
+  </q-page-container>
 
   </q-layout>
 </template>
@@ -111,7 +114,7 @@ export default {
     }
   },
   created () {
-    var that = this
+    const that = this
     this.$q.notify.setDefaults({
       position: 'top-right',
       timeout: 3000,
@@ -145,7 +148,7 @@ export default {
 
     this.coreNotification()
   },
-  beforeDestroy () {
+  beforeUnmount () {
     if (this.coreNotify !== undefined) this.coreNotify()
     this.$crestron.unsubscribeState('boolean', String(this.joins.feedbackDetected))
     this.$crestron.unsubscribeState('boolean', String(this.joins.spashReturn))

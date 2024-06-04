@@ -72,7 +72,7 @@ export default {
     },
     // generate classes to add to button
     classCalc () {
-      var classes = []
+      const classes = []
 
       if (this.block) classes.push('full-width')
 
@@ -81,14 +81,14 @@ export default {
   },
   created () {
     if (this.fbColor) {
-      var that = this
+      const that = this
       // subscribe the feedback value to the processor fb
       this.$crestron.subscribeState('boolean', String(that.join), function (value) {
         that.feedbackValue = value
       })
     }
   },
-  beforeDestroy () {
+  beforeUnmount () {
     // unsubscribe if element is destroyed
     if (this.fbColor) this.$crestron.unsubscribeState('boolean', String(this.join))
   }

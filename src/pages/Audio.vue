@@ -43,6 +43,7 @@ import ChVerticalSlider from '../components/crestron/VerticalSlider'
 import ChBtn from '../components/crestron/Button'
 
 export default {
+  name: 'AudioPage',
   components: {
     ChVerticalSlider,
     ChBtn
